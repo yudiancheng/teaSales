@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yu.mapper.UserVoucherMapper">
+    <resultMap id="normalVoucherMap" type="userVoucher">
+        <id column="id" property="id"/>
+        <result column="userid" property="userid"/>
+        <result column="voucherId" property="voucherId"/>
+        <association property="voucher" column="voucherId" select="com.yu.mapper.VoucerMapper.selVoucherByVid" javaType="voucher"></association>
+    </resultMap>
+
+    <!--根据用户id查询持有的红包-->
+    <select id="selVoucherByUid" resultMap="normalVoucherMap" parameterType="int">
+        select id,userid,voucherId from user_voucher where userid=#{0} and total != 0
+    </select>
+
+    <!--给指定用户加入指定金额和门槛的红包-->
+    <insert id="insUserVoucherForUser" >
+        insert into user_voucher
+        values
+        (default,#{0},(select id from voucher where amount = #{1} and `limit` = #{2}));
+    </insert>
+
+    <!--查询用户是否已经拥有指定金额和门槛的红包-->
+    <select id="selVoucherByUidAndVoucher" resultType="userVoucher">
+        select a.id,a.userid,a.voucherId,a.total from user_voucher a left join
+        voucher b on a.voucherId = b.id where
+        a.userid = #{0} and b.amount=#{1} and b.limit=#{2}
+    </select>
+</mapper>

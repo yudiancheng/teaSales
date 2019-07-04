@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yu.mapper.ProductDetailedMapper">
+    <resultMap id="detailedMap" type="productDetailed">
+        <id property="id" column="id"/>
+        <result property="productId" column="productId"/>
+        <result property="bigImg" column="bigImg"/>
+        <result property="smallImg" column="smallImg"/>
+        <result property="detailedImg" column="detailedImg"/>
+        <result property="keyword" column="keyword"/>
+        <result property="remain" column="remain"/>
+        <association property="product" column="productId" select="com.yu.mapper.ProductMapper.selProductById" javaType="product"></association>
+    </resultMap>
+
+    <!--根据指定的商品id查询商品细节信息-->
+    <select id="selDetailedByPid" resultMap="detailedMap" parameterType="int">
+        select id,productId,bigImg,smallImg,detailedImg,keyword,remain from product_detailed where productId = #{0}
+    </select>
+</mapper>

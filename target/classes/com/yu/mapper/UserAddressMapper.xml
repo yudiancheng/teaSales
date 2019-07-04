@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yu.mapper.UserAddressMapper">
+    <!--修改用户收货地址-->
+    <update id="updUserAddress" parameterType="userAddress">
+        update user_address
+        <set>
+            <if test="receiverName != null and receiverName != ''">
+                receiverName = #{receiverName},
+            </if>
+            <if test="location != null and location != ''">
+                location = #{location},
+            </if>
+            <if test="detailedAddress != null and detailedAddress != ''">
+                detailedAddress = #{detailedAddress},
+            </if>
+            <if test="postalCode != null and postalCode != ''">
+                postalCode = #{postalCode},
+            </if>
+            <if test="phone != null and phone != ''">
+                phone=#{phone}
+            </if>
+        </set>
+        where id = #{id} and userId = #{userId}
+    </update>
+</mapper>

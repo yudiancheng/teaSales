@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yu.mapper.IntegralGetRecordMapper">
+    <resultMap id="integralGetRecordMap" type="integralGetRecord">
+        <id column="id" property="id"/>
+        <result column="userid" property="userid"/>
+        <result column="orderId" property="orderId"/>
+        <result column="integral" property="integral"/>
+        <result column="time" property="time"/>
+        <association property="order" column="orderId" select="com.yu.mapper.OrderMapper.selOrderById" javaType="order"></association>
+    </resultMap>
+
+    <!--查询指定用户的积分获取记录-->
+    <select id="selIntegralGetRecordByUid" parameterType="int" resultMap="integralGetRecordMap">
+        select id,userid,orderId,integral,`time` from integral_get_record where userid = #{0}
+    </select>
+</mapper>

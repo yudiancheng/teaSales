@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yu.mapper.OrderMapper">
+    <!--根据用户id查询订单-->
+    <select id="selOrderByUid" resultType="order" parameterType="int">
+        select * from `order` where userid = #{0}
+    </select>
+
+    <!--根据订单id查询订单-->
+    <select id="selOrderById" resultType="order" parameterType="int">
+        select * from `order` where id = #{0}
+    </select>
+
+    <!--插入新订单-->
+    <insert id="insOrderForUser" parameterType="order">
+      insert into `order` values(
+        default,#{userid},#{addressId},#{invoiceId},#{voucherId},#{express},#{payment},#{isInvoice},
+        #{message},#{total},#{discount},#{delivery},#{actualPay},#{createTime},0
+      );
+   </insert>
+</mapper>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yu.mapper.ProductMapper">
+    <resultMap id="productMap" type="product">
+        <id column="id" property="id"/>
+        <result column="image" property="image"/>
+        <result column="licenseId" property="licenseId"/>
+        <result column="standardId" property="standardId"/>
+        <result column="dateOfProduction" property="dateOfProduction"/>
+        <result column="qualityTime" property="qualityTime"/>
+        <result column="name" property="name"/>
+        <result column="netWeight" property="netWeight"/>
+        <result column="packaging" property="packaging"/>
+        <result column="brand" property="brand"/>
+        <result column="foodTech" property="foodTech"/>
+        <result column="level" property="level"/>
+        <result column="placeOrigin" property="placeOrigin"/>
+        <result column="marketPrice" property="marketPrice"/>
+        <result column="ourPrice" property="ourPrice"/>
+        <result column="clickCount" property="clickCount"/>
+        <association property="saleCount" column="id" select="com.yu.mapper.BuyRecordMapper.selSaleCountByPid" javaType="int"></association>
+        <association property="commentCount" column="id" select="com.yu.mapper.UserCommentMapper.selCommentCountByPid" javaType="int"></association>
+    </resultMap>
+
+    <!--用于获取商品详细信息的resultMap-->
+    <resultMap id="productDetailedMap" type="product">
+        <id column="id" property="id"/>
+        <result column="image" property="image"/>
+        <result column="licenseId" property="licenseId"/>
+        <result column="standardId" property="standardId"/>
+        <result column="dateOfProduction" property="dateOfProduction"/>
+        <result column="qualityTime" property="qualityTime"/>
+        <result column="name" property="name"/>
+        <result column="netWeight" property="netWeight"/>
+        <result column="packaging" property="packaging"/>
+        <result column="brand" property="brand"/>
+        <result column="foodTech" property="foodTech"/>
+        <result column="level" property="level"/>
+        <result column="placeOrigin" property="placeOrigin"/>
+        <result column="marketPrice" property="marketPrice"/>
+        <result column="ourPrice" property="ourPrice"/>
+        <result column="clickCount" property="clickCount"/>
+        <association property="productDetailed" column="id" select="com.yu.mapper.ProductDetailedMapper.selDetailedByPid" javaType="int"></association>
+    </resultMap>
+    <!--查询所有商品-->
+    <select id="selAllProduct" resultMap="productMap">
+        select * from product
+    </select>
+
+    <!--根据时间前几名查询商品-->
+    <select id="selProductByTime" parameterType="int" resultMap="productMap">
+        select * from product order by addTime limit 0,#{0}
+    </select>
+
+    <!--根据商品id查询商品-->
+    <select id="selProductById" resultMap="productMap" parameterType="int">
+        select * from product where id=#{0}
+    </select>
+
+    <!--根据商品id查询商品 不用resultMap-->
+    <select id="selProductByIdNoMap" resultType="product" parameterType="int">
+        select * from product where id=#{0}
+    </select>
+
+    <!--根据商品id查询商品 用于查询商品详细信息-->
+    <select id="selProductByIdDeteailed" resultMap="productDetailedMap" parameterType="int">
+        select * from product where id=#{0}
+    </select>
+</mapper>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yu.mapper.ShoppingMapper">
+    <resultMap id="shoppingMap" type="shopping">
+        <id column="shoppingId" property="id"/>
+        <result column="userid" property="userid"/>
+            <collection property="shoppingProducts" ofType="shoppingProduct" >
+                <id column="spid" property="id"/>
+                <result column="productId" property="productId"/>
+                <result column="productTotal" property="productTotal"/>
+                <association property="product" column="productId" select="com.yu.mapper.ProductMapper.selProductByIdDeteailed" javaType="product"></association>
+             </collection>
+    </resultMap>
+
+    <!--根据用户id查询购物车-->
+    <select id="selShoppingByUid" parameterType="int" resultMap="shoppingMap">
+        select a.shoppingId id,a.userid userid,b.id spid,b.productId productId,b.productTotal productTotal
+        from shopping a
+        left join
+        shopping_product b
+        on a.shoppingId = b.shoppingId
+        where a.userid = #{0}
+    </select>
+
+    <!--根据商品id和userId查询购物车中是否存在该商品-->
+    <select id="selShoppingByPidAndUid" resultType="shopping">
+        select a.shoppingId id,a.userid userid,b.productId productId
+        from shopping a
+        left join shopping_product b
+        on a.shoppingId = b.shoppingId
+      where a.userid=#{0} and b.productId=#{1}
+    </select>
+    
+
+    <!--在购物车里删除指定用户的指定商品-->
+    <delete id="delProFromCar">
+        delete from shopping_product where shoppingId=(
+        select shoppingId from shopping where userid=#{1}
+        ) and productId = #{0}
+    </delete>
+
+
+    <!--往指定用户的购物车中添加商品-->
+    <insert id="insProToCarForUser">
+        insert into shopping_product values(default,
+        (select shoppingId from shopping where userid=#{0}),
+        #{1},1)
+    </insert>
+
+    <!--更新指定用户购物车中商品的数目-->
+    <update id="updateProductNum">
+        update shopping_product
+        <set>
+            productTotal = #{2}
+        </set>
+        where shoppingId=
+        (select shoppingId from shopping where userid=#{0}) and productId=#{1}
+    </update>
+
+
+
+
+</mapper>

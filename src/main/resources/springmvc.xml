@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+    <!-- 扫描注解 -->
+    <context:component-scan base-package="com.yu.controller"></context:component-scan>
+
+    <!--避免ajax请求出现406错误-->
+    <bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+        <property name="favorPathExtension" value="false"/>
+        <property name="favorParameter" value="false"/>
+        <property name="ignoreAcceptHeader" value="false"/>
+        <property name="mediaTypes">
+            <value>
+                atom = application/atom+xml
+                html = text/html
+                json = application/json
+                * = */*
+            </value>
+        </property>
+    </bean>
+
+    <!-- 注解驱动 -->
+    <mvc:annotation-driven content-negotiation-manager="contentNegotiationManager" >
+        <mvc:message-converters register-defaults="true">
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list><value>text/html;charset=UTF-8</value></list>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <!-- 静态资源 -->
+    <mvc:resources location="/big/" mapping="/big/**"></mvc:resources>
+    <mvc:resources location="/css/" mapping="/css/**"></mvc:resources>
+    <mvc:resources location="/files/" mapping="/files/**"></mvc:resources>
+    <mvc:resources location="/fonts/" mapping="/fonts/**"></mvc:resources>
+    <mvc:resources location="/images/" mapping="/images/**"></mvc:resources>
+    <mvc:resources location="/js/" mapping="/js/**"></mvc:resources>
+    <mvc:resources location="/products/" mapping="/products/**"></mvc:resources>
+    <mvc:resources location="/small/" mapping="/small/**"></mvc:resources>
+    <mvc:resources location="/threelinkage/" mapping="/threelinkage/**"></mvc:resources>
+    <mvc:resources location="/detailedImg/" mapping="/detailedImg/**"></mvc:resources>
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/page/"></property>
+        <property name="suffix" value=".jsp"></property>
+    </bean>
+    <!-- Mutilpart解析器 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"></bean>
+</beans>

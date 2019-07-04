@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yu.mapper.UserCollectMapper">
+    <resultMap id="userCollectMap" type="userCollect">
+        <id column="id" property="id"/>
+        <result column="userid" property="userid"/>
+        <result column="productId" property="productId"/>
+        <association property="product" column="productId" select="com.yu.mapper.ProductMapper.selProductById" javaType="product"></association>
+    </resultMap>
+    <!--根据指定的用户id查询收藏的商品-->
+    <select id="selUserCollectByUid" parameterType="int" resultMap="userCollectMap">
+        select * from user_collect where userid=#{0}
+    </select>
+
+    <!--根据指定的用户id查询收藏的商品（分页）-->
+    <select id="selUserCollectByUidLimitPage" parameterType="map" resultMap="userCollectMap">
+        select * from user_collect where userid=#{userid} limit #{pageNumber},#{pageSize}
+    </select>
+
+
+</mapper>

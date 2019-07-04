@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yu.mapper.ScanRecordMapper">
+    <resultMap id="ScanRecordMap" type="scanRecord">
+        <id column="id" property="id"/>
+        <result column="userid" property="userid"/>
+        <result column="productId" property="productId"/>
+        <association property="product"  column="productId"  select="com.yu.mapper.ProductMapper.selProductById" javaType="product"></association>
+    </resultMap>
+    <!--根据用户id查询浏览历史-->
+    <select id="selScanRecordByUid" resultMap="ScanRecordMap" parameterType="int">
+        select * from scan_record where userid=#{0}
+    </select>
+    <!--根据用户id查询浏览历史 返回值list-->
+    <select id="selListScanRecordByUid" resultMap="ScanRecordMap" parameterType="int">
+        select id,userid,productId from scan_record where userid=#{0}
+    </select>
+</mapper>
